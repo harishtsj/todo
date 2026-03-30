@@ -6,11 +6,15 @@ import { useAppContext } from '../../context/AppContext';
 import editdark from '../../assets/EditDark.svg'
 import trash from '../../assets/trash.svg'
 import reject from '../../assets/reject.svg'
+import { useDispatch, useSelector } from 'react-redux';
+import { setTodoList } from '../../Slices/todoSlice';
 
 // axios.defaults.baseURL = import.meta.env.TODO_SERVER_URL;
 
 const Todo = () => {
-    const { todoList, setTodoList } = useAppContext()
+    // const { todoList, setTodoList } = useAppContext()
+    const { todoList } = useSelector((state) => state.todo);
+    const dispatch = useDispatch();
 
     const [value, setValue] = useState('');
 
@@ -41,7 +45,9 @@ const Todo = () => {
         try {
             const { data } = await axios.post('/todo/tasks', { title: value })
             if (data.success) {
-                setTodoList(prev => [...prev, data.newTask])
+                const newTodoList = [...todoList, data.newTask];
+                dispatch(setTodoList(newTodoList));
+                // dispatch(setTodoList(prev => [...prev, data.newTask]))
                 setValue('')
                 toast.success(data.message)
             } else {
@@ -56,7 +62,9 @@ const Todo = () => {
         try {
             const { data } = await axios.delete(`/todo/tasks/${idToDelete}`)
             if (data.success) {
-                setTodoList(prev => prev.filter(item => item._id !== idToDelete))
+                const newTodos = todoList.filter(todo => todo._id !== idToDelete)
+                dispatch(setTodoList(newTodos))
+                // dispatch(setTodoList(prev => prev.filter(item => item._id !== idToDelete)))
                 toast.success(data.message);
             } else {
                 toast.error(data.message)
@@ -69,9 +77,10 @@ const Todo = () => {
     const updateTask = async (id, updates) => {
         try {
             const { data } = await axios.put(`/todo/tasks/${id}`, updates);
-            const updatedId = data.updatedTask._id
             if (data.success) {
-                setTodoList(prev => prev.map(item => item._id === updatedId ? { ...item, ...updates } : item))
+                const updatedId = data.updatedTask._id;
+                const updatedTodo = todoList.map(todo => todo._id === updatedId ? {...todo, ...updates} : todo)
+                dispatch(setTodoList(updatedTodo))
                 setRenameState({ isRenameModalOpen: false, selectedId: null, value: '' })
                 toast.success(data.message)
             } else {
