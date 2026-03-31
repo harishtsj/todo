@@ -12,6 +12,21 @@ export const getTasks = async (req, res) => {
     }
 }
 
+export const getTaskById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const userId = req.user._id;
+
+        const task = await Todo.findOne({_id: id, userId})
+        if (!task) {
+            return res.status(404).json({ success: false, message: 'Task not found' })
+        }
+        return res.json({ success: true, task })
+    } catch (err) {
+        return res.status(500).json({ success: false, message: 'Unable to fetch the task' })
+    }
+}
+
 export const createTask = async (req, res) => {
 
     try {
@@ -54,7 +69,7 @@ export const updateTask = async (req, res) => {
     try {
         const userId = req.user._id;
         const id = req.params.id;
-        const { title, status } = req.body
+        const { title, status, flagged } = req.body
 
         const updateFields = {}
 
@@ -64,9 +79,13 @@ export const updateTask = async (req, res) => {
             }
             updateFields.title = title
         }
-        
+
         if (status !== undefined) {
             updateFields.status = status
+        }
+
+        if (flagged !== undefined) {
+            updateFields.flagged = flagged
         }
 
         const validStatus = ['pending', 'completed', 'rejected']

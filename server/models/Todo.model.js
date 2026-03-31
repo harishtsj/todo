@@ -7,6 +7,7 @@ const TodoSchema = new mongoose.Schema({
         enum: ['pending', 'completed', 'rejected'],
         default: 'pending',
     },
+    flagged: {type: Boolean, default: false},
     userId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

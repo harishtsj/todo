@@ -36,12 +36,20 @@ export const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
+
+        // as when creating the schema, the password is made to select: flase, 
+        // this means, By default, NEVER include password when fetching a user 
+
+        // the below line does overrides the default.
+        // “Even though password is hidden, INCLUDE it for this query”
         const user = await User.findOne({ email }).select('+password');
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' })
         }
 
+        // we need to the password to be visible, 
+        // as we are comparing the hashed password, with the user input password from req.body
         const isMatch = await bcrypt.compare(password, user.password)
 
         if (!isMatch) {

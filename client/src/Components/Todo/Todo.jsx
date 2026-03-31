@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import './Todo.css'
 import toast from 'react-hot-toast'
 import axios from '../../utils/AxiosInstance'
-import { useAppContext } from '../../context/AppContext';
 import editdark from '../../assets/EditDark.svg'
 import trash from '../../assets/trash.svg'
 import reject from '../../assets/reject.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { setTodoList } from '../../Slices/todoSlice';
+import FlagIcon from './FlagIcon';
 
 // axios.defaults.baseURL = import.meta.env.TODO_SERVER_URL;
 
@@ -29,16 +29,46 @@ const Todo = () => {
     })
 
     const statusTab = [{
-        name: 'all',
-        className: 'bg-blue-400/70'
+        name: 'pending',
+        color:"text-yellow-700",
+        className: 'bg-yellow-400/70',
+        ring: 'ring-yellow-700/70'
     }, {
         name: 'completed',
-        className: 'bg-green-400/70'
+        color:"text-green-700",
+        className: 'bg-green-400/70',
+        ring: 'ring-green-700/70'
     }, {
         name: 'rejected',
-        className: 'bg-red-400/70'
+        color:"text-red-700",
+        className: 'bg-red-400/70',
+        ring: 'ring-red-700/70'
+    }, {
+        name: 'flagged',
+        color:"text-orange-700",
+        className: 'bg-orange-400/70',
+        ring: 'ring-orange-700/70'
+    }, {
+        name: 'all',
+        color:"text-blue-700",
+        className: 'bg-blue-400/70',
+        ring: 'ring-blue-700/70'
     }]
+    // const statusTab = [{
+    //     name: 'all',
+    //     className: 'bg-blue-400/70'
+    // }, {
+    //     name: 'completed',
+    //     className: 'bg-green-400/70'
+    // }, {
+    //     name: 'rejected',
+    //     className: 'bg-red-400/70'
+    // }, {
+    //     name: 'flagged',
+    //     className: 'bg-orange-400/70'
+    // }]
 
+    // Adding new items to the todolist
     const addItems = async (value) => {
         if (value.trim() === '') return;
 
@@ -58,6 +88,7 @@ const Todo = () => {
         }
     }
 
+    // deleting the todo from the todolist
     const deleteTodo = async (idToDelete) => {
         try {
             const { data } = await axios.delete(`/todo/tasks/${idToDelete}`)
@@ -74,12 +105,13 @@ const Todo = () => {
         }
     }
 
+    // updating the todolist
     const updateTask = async (id, updates) => {
         try {
             const { data } = await axios.put(`/todo/tasks/${id}`, updates);
             if (data.success) {
                 const updatedId = data.updatedTask._id;
-                const updatedTodo = todoList.map(todo => todo._id === updatedId ? {...todo, ...updates} : todo)
+                const updatedTodo = todoList.map(todo => todo._id === updatedId ? { ...todo, ...updates } : todo)
                 dispatch(setTodoList(updatedTodo))
                 setRenameState({ isRenameModalOpen: false, selectedId: null, value: '' })
                 toast.success(data.message)
@@ -91,18 +123,30 @@ const Todo = () => {
         }
     }
 
+    // setting modal to true for rename popup
+    const renameTodo = (todo) => {
+        setRenameState({ isRenameModalOpen: true, selectedId: todo._id, value: todo.title })
+    }
+
+    // handle rename onchange function, checks for empty spaces
     const handleRenameInputChange = (e) => {
         const newValue = e.target.value;
         setRenameState(prev => ({ ...prev, value: newValue }))
     };
 
-    const renameTodo = (todo) => {
-        setRenameState({ isRenameModalOpen: true, selectedId: todo._id, value: todo.title })
-    }
-
+    // rename todo task
     const handleRename = () => {
         if (!renameState.value.trim()) return;
         updateTask(renameState.selectedId, { title: renameState.value })
+    }
+
+    // todo status 'completed' status checkbox
+    const updateStatus = (e, id) => {
+        if (e.target.checked) {
+            markCompleted(id)
+        } else {
+            updateTask(id, { status: 'pending' })
+        }
     }
 
     const markCompleted = async (id) => {
@@ -113,20 +157,29 @@ const Todo = () => {
         updateTask(id, { status: 'rejected' })
     }
 
-    const updateStatus = (e, id) => {
-        if (e.target.checked) {
-            markCompleted(id)
-        } else {
-            updateTask(id, { status: 'pending' })
+    const toggleFlag = async (id, currentFlag) => {
+        try {
+            await updateTask(id, { flagged: !currentFlag })
+        } catch (err) {
+            toast.err(err.message)
         }
     }
 
     const filteredList = todoList.filter(todo => {
         if (filter === 'completed') return todo.status === 'completed';
         if (filter === 'rejected') return todo.status === 'rejected';
-        return true;
+        if (filter === 'pending') return todo.status === 'pending';
+        if (filter === 'flagged') return todo.flagged
+            return true;
     })
 
+    const changeFilterTab = (tabName) => {
+        if(tabName !== filter) {
+            setFilter(tabName)
+        } else {
+            setFilter('')
+        }
+    }
 
     return (
         <div className='flex flex-col p-3 gap-3 items-center'>
@@ -150,22 +203,22 @@ const Todo = () => {
 
             </div>
 
-            {/* All, completed, Rejected*/}
+            {/* All, completed, Rejected, Flagged*/}
 
             <div className='w-full flex flex-col gap-3 p-2'>
 
-                <div className='grid grid-cols-2 sm:grid-cols-3 gap-2 w-full'>
+                <div className='grid grid-cols-2 sm:grid-cols-5 gap-2 w-full'>
                     {statusTab.map((status) => {
                         const isActive = filter === status.name;
 
                         return (
                             <button
                                 key={status.name}
-                                onClick={() => setFilter(status.name)}
+                                onClick={() => changeFilterTab(status.name)}
                                 className={`p-2 border rounded capitalize text-sm sm:text-base transition-all duration-200 hover:scale-[1.01]
-                                    ${status.className}
+                                    ${status.className} ${status.color}
                                     ${isActive
-                                        ? "ring-2 ring-black scale-95 shadow-md font-semibold active:scale-90"
+                                        ? `ring-2 ${status.ring} shadow-md font-semibold active:scale-90`
                                         : "opacity-70 hover:opacity-100"}`}>
                                 {status.name}
                             </button>
@@ -181,7 +234,7 @@ const Todo = () => {
                                     <div
                                         key={todo._id}
                                         className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border rounded px-3 py-3 
-                                            transition-all duration-300 ease-in-out animate-[fadeIn_0.3s_ease-in]">
+                                            transition-all duration-300 ease-in-out animate-[fadeIn_0.3s_ease-in] hover:bg-slate-300/50 group">
                                         <div className='px-2 flex gap-3'>
                                             <input type='checkbox' defaultChecked={todo.status === 'completed' ? true : false} onChange={(e) => updateStatus(e, todo._id)} />
                                             <p className='wrap-break-word text-sm sm:text-base'>{todo.title}</p>
@@ -198,6 +251,9 @@ const Todo = () => {
                                                 ${todo.status === 'completed' ? 'bg-green-500/50' : 'bg-red-500/50'}
                                                 `} >{todo.status}</span>
                                             )}
+                                            <button className={`${todo.flagged ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} onClick={() => toggleFlag(todo._id, todo.flagged)}>
+                                                <FlagIcon active={todo.flagged} />
+                                            </button>
                                         </div>
                                     </div>
                                 )

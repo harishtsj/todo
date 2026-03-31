@@ -3,15 +3,19 @@ import { useContext } from "react";
 import axios from '../utils/AxiosInstance'
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setTodoList } from "../Slices/todoSlice";
 
 const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
-    const [todoList, setTodoList] = useState([]);
+    // const [todoList, setTodoList] = useState([]);
+    const { todoList } = useSelector((state) => state.todo)
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const fetchUser = async () => {
         try {
@@ -33,7 +37,7 @@ const AppContextProvider = ({ children }) => {
         try {
             const { data } = await axios.get('/todo/tasks');
             if (data.success) {
-                setTodoList(data.tasks)
+                dispatch(setTodoList(data.tasks))
             } else {
                 return toast.error(data.message)
             }
