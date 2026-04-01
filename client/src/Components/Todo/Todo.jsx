@@ -8,6 +8,7 @@ import reject from '../../assets/reject.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { setTodoList } from '../../Slices/todoSlice';
 import FlagIcon from './FlagIcon';
+import StatusTabs from '../StatusBar/StatusBar';
 
 // axios.defaults.baseURL = import.meta.env.TODO_SERVER_URL;
 
@@ -28,44 +29,38 @@ const Todo = () => {
         value: ''
     })
 
-    const statusTab = [{
-        name: 'pending',
-        color:"text-yellow-700",
-        className: 'bg-yellow-400/70',
-        ring: 'ring-yellow-700/70'
-    }, {
-        name: 'completed',
-        color:"text-green-700",
-        className: 'bg-green-400/70',
-        ring: 'ring-green-700/70'
-    }, {
-        name: 'rejected',
-        color:"text-red-700",
-        className: 'bg-red-400/70',
-        ring: 'ring-red-700/70'
-    }, {
-        name: 'flagged',
-        color:"text-orange-700",
-        className: 'bg-orange-400/70',
-        ring: 'ring-orange-700/70'
-    }, {
-        name: 'all',
-        color:"text-blue-700",
-        className: 'bg-blue-400/70',
-        ring: 'ring-blue-700/70'
-    }]
+    const statusTab = [
+        {name: 'pending'}, 
+        {name: 'completed'}, 
+        {name: 'rejected'}, 
+        {name: 'flagged'}, 
+        {name: 'all'}
+    ]
     // const statusTab = [{
-    //     name: 'all',
-    //     className: 'bg-blue-400/70'
+    //     name: 'pending',
+    //     color:"text-yellow-700",
+    //     className: 'bg-yellow-400/70',
+    //     ring: 'ring-yellow-700/70'
     // }, {
     //     name: 'completed',
-    //     className: 'bg-green-400/70'
+    //     color:"text-green-700",
+    //     className: 'bg-green-400/70',
+    //     ring: 'ring-green-700/70'
     // }, {
     //     name: 'rejected',
-    //     className: 'bg-red-400/70'
+    //     color:"text-red-700",
+    //     className: 'bg-red-400/70',
+    //     ring: 'ring-red-700/70'
     // }, {
     //     name: 'flagged',
-    //     className: 'bg-orange-400/70'
+    //     color:"text-orange-700",
+    //     className: 'bg-orange-400/70',
+    //     ring: 'ring-orange-700/70'
+    // }, {
+    //     name: 'all',
+    //     color:"text-blue-700",
+    //     className: 'bg-blue-400/70',
+    //     ring: 'ring-blue-700/70'
     // }]
 
     // Adding new items to the todolist
@@ -170,15 +165,16 @@ const Todo = () => {
         if (filter === 'rejected') return todo.status === 'rejected';
         if (filter === 'pending') return todo.status === 'pending';
         if (filter === 'flagged') return todo.flagged
-            return true;
+        return true;
     })
 
     const changeFilterTab = (tabName) => {
-        if(tabName !== filter) {
-            setFilter(tabName)
-        } else {
-            setFilter('')
-        }
+        // if (tabName !== filter) {
+        //     setFilter(tabName)
+        // } else {
+        //     setFilter('')
+        // }
+        setFilter(tabName);
     }
 
     return (
@@ -195,7 +191,7 @@ const Todo = () => {
                     onKeyDown={(e) => { if (e.key === 'Enter') addItems(value) }}
                 />
                 <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:scale-[1.01] transition-all duration-300 w-full text-wrap sm:w-auto active:scale-90"
+                    className="bg-blue-500 min-w-29 text-white px-4 py-2 rounded hover:scale-[1.01] transition-all duration-300 w-full text-wrap sm:w-auto active:scale-90"
                     onClick={() => addItems(value)}
                 >
                     Add
@@ -205,9 +201,11 @@ const Todo = () => {
 
             {/* All, completed, Rejected, Flagged*/}
 
-            <div className='w-full flex flex-col gap-3 p-2'>
+            <div className='w-full flex flex-col gap-3 py-2'>
 
-                <div className='grid grid-cols-2 sm:grid-cols-5 gap-2 w-full'>
+                <StatusTabs tabs={statusTab} active={filter} onChange={changeFilterTab}/>
+
+                {/* <div className='grid grid-cols-2 sm:grid-cols-5 gap-2 w-full'>
                     {statusTab.map((status) => {
                         const isActive = filter === status.name;
 
@@ -215,16 +213,16 @@ const Todo = () => {
                             <button
                                 key={status.name}
                                 onClick={() => changeFilterTab(status.name)}
-                                className={`p-2 border rounded capitalize text-sm sm:text-base transition-all duration-200 hover:scale-[1.01]
+                                className={`p-2 border rounded capitalize text-sm text-white sm:text-base transition-all duration-200 hover:scale-[1.03]
                                     ${status.className} ${status.color}
                                     ${isActive
-                                        ? `ring-2 ${status.ring} shadow-md font-semibold active:scale-90`
+                                        ? `ring-2 ring-gray-500/40 shadow-md scale-[1.03] font-semibold active:scale-90`
                                         : "opacity-70 hover:opacity-100"}`}>
                                 {status.name}
                             </button>
                         );
                     })}
-                </div>
+                </div> */}
 
                 <div className="flex flex-col w-full gap-2 max-h-[60vh] overflow-y-auto transition-all duration-300">
                     {
