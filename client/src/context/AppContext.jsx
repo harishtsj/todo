@@ -11,6 +11,7 @@ const AppContext = createContext();
 const AppContextProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
+    const [theme, setTheme] = useState('light')
     // const [todoList, setTodoList] = useState([]);
     const { todoList } = useSelector((state) => state.todo)
     const [loading, setLoading] = useState(true);
@@ -71,7 +72,15 @@ const AppContextProvider = ({ children }) => {
         }
     }, [user])
 
-    const value = { user, setUser, todoList, setTodoList, logout, loading }
+    useEffect(() => {
+        if(theme === 'dark') {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    }, [theme])
+
+    const value = { user, setUser, todoList, setTodoList, logout, loading, theme, setTheme }
 
     return (
         <AppContext.Provider value={value}>

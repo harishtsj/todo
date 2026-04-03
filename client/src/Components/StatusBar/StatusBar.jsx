@@ -51,7 +51,23 @@
 
 import React, { useEffect, useRef } from 'react'
 
-const StatusTabs = ({ tabs, active, onChange }) => {
+const tabs = [
+    'pending',
+    'completed',
+    // 'rejected',
+    'flagged',
+    'all'
+]
+
+const StatusTabs = ({ active, onChange }) => {
+
+    // const tabs = useMemo(() => [
+    //     'pending',
+    //     'completed',
+    //     // 'rejected',
+    //     'flagged',
+    //     'all'
+    // ], [])
 
     const containerRef = useRef(null);
     const indicatorRef = useRef(null);
@@ -60,18 +76,19 @@ const StatusTabs = ({ tabs, active, onChange }) => {
 
         const updateIndicator = () => {
             // finding index of the array
-            const index = tabs.findIndex(t => t.name === active);
+            const index = tabs.findIndex(t => t === active);
+
             const container = containerRef.current;
             const indicator = indicatorRef.current;
-    
+
             if (!container || !indicator) return;
-    
+
             // getting the each tabwidth by the container's width / tab's length
             const tabWidth = container.offsetWidth / tabs.length;
-    
+
             // based on the index, the tab line will translate
             indicator.style.transform = `translateX(${index * tabWidth}px)`;
-    
+
             // setting the width of the tab
             indicator.style.width = `${tabWidth}px`;
         }
@@ -87,15 +104,15 @@ const StatusTabs = ({ tabs, active, onChange }) => {
     }, [active, tabs]);
 
     return (
-        <div className="pb-2 w-full">
-            <div ref={containerRef} className="flex relative">
+        <div className="pb-2">
+            <div ref={containerRef} className="flex relative gap-3 overflow-x-auto sm:min-w-95">
                 {tabs.map((tab) => {
-                    const isActive = active === tab.name;
+                    const isActive = active === tab;
                     return (
-                        <button key={tab.name} onClick={() => onChange(tab.name)}
+                        <button key={tab} onClick={() => onChange(tab)}
                             className={`flex-1 py-3 text-sm sm:text-base uppercase transition-all duration-200 
                                 ${isActive ? "text-blue-600 font-medium" : "text-gray-500 hover:text-gray-700"}`}>
-                            {tab.name}
+                            {tab}
                         </button>
                     );
                 })}

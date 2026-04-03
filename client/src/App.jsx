@@ -5,12 +5,12 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./Components/Login/Login";
 import Header from "./Components/Header/Header";
 import ProtectedRoutes from "./Components/ProtectedRoutes/ProtectedRoutes";
-import Todo from "./Components/Todo/Todo";
+import TodoList from "./Components/Todo/TodoList";
 
 function App() {
 
   return (
-    <div className="min-h-screen w-full flex justify-center">
+    <div className="min-h-screen w-full min-w-95 flex justify-center dark:bg-black">
       <div className="w-full max-w-2xl px-4">
         <Toaster />
         <Routes>
@@ -22,7 +22,7 @@ function App() {
           <Route path="/" element={
             <ProtectedRoutes>
               <Header />
-              <Todo />
+              <TodoList />
             </ProtectedRoutes>
           } />
         </Routes>
