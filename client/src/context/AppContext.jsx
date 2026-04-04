@@ -13,7 +13,7 @@ const AppContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [theme, setTheme] = useState('light')
     // const [todoList, setTodoList] = useState([]);
-    const { todoList } = useSelector((state) => state.todo)
+    // const { todoList } = useSelector((state) => state.todo)
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -81,7 +81,7 @@ const AppContextProvider = ({ children }) => {
         }
     }, [theme])
 
-    const value = { user, setUser, todoList, setTodoList, logout, loading, theme, setTheme, fetchUser }
+    const value = { user, setUser, logout, loading, theme, setTheme, fetchUser }
 
     return (
         <AppContext.Provider value={value}>
