@@ -2,7 +2,7 @@ import axios from '../../utils/AxiosInstance'
 import { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
@@ -10,7 +10,7 @@ const Login = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const { setUser } = useAppContext()
 
@@ -23,7 +23,7 @@ const Login = () => {
                 const { data } = await axios.post(url, { email, password })
                 if (data.success) {
                     setUser(data.user);
-                    navigate('/');
+                    // navigate('/');
                 } else {
                     toast.error(data.message)
                 }
@@ -52,32 +52,80 @@ const Login = () => {
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 m-auto items-center p-8 py-12 w-80 sm:w-88 text-gray-500 rounded-lg shadow-xl border border-gray-200 bg-white">
             <p className="text-2xl font-medium m-auto">
-                <span className="text-indigo-500">User</span> {state === "login" ? "Login" : "Sign Up"}
+                <span className="text-blue-500">User</span> {state === "login" ? "Login" : "Sign Up"}
             </p>
             {state === "register" && (
                 <div className="w-full">
-                    <p>Name</p>
-                    <input onChange={(e) => setName(e.target.value)} value={name} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-indigo-500" type="text" required />
+                    {/* <p>Name</p> */}
+                    {/* <input onChange={(e) => setName(e.target.value)} value={name} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-blue-500" type="text" required /> */}
+                    <div className='relative flex-1'>
+                        <input
+                            className="w-full p-2 mt-1 border border-gray-300 rounded outline-blue-500 dark:text-white
+                            dark:border-gray-600/60 dark:placeholder:text-gray-500 caret-blue-500 transition-all duration-400 placeholder:text-xs peer"
+                            type="text" placeholder=" "
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <label className='absolute left-2 text-sm text-gray-500 pointer-events-none origin-left -top-1.75 scale-75 px-1 bg-white
+                            peer-focus:-top-1.75 peer-focus:translate-y-0 peer-focus:scale-75 peer-focus:text-blue-500 peer-focus:bg-white peer-focus:px-1
+                            peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100
+                            peer-placeholder-shown:text-gray-500
+                            transition-[top,scale,translate,color,padding] duration-350 dark:peer-focus:bg-black'>
+                            Name
+                        </label>
+                    </div>
                 </div>
             )}
             <div className="w-full ">
-                <p>Email</p>
-                <input onChange={(e) => setEmail(e.target.value)} value={email} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-indigo-500" type="email" required />
+                {/* <p>Email</p>
+                <input onChange={(e) => setEmail(e.target.value)} value={email} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-blue-500" type="email" required /> */}
+                <div className='relative flex-1'>
+                    <input
+                        className="w-full p-2 mt-1 border border-gray-300 rounded outline-blue-500 dark:text-white
+                    dark:border-gray-600/60 dark:placeholder:text-gray-500 caret-blue-500 transition-all duration-400 placeholder:text-xs peer"
+                        type="text" placeholder=" "
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <label className='absolute left-2 text-sm text-gray-500 pointer-events-none origin-left -top-1.75 scale-75 px-1 bg-white
+                    peer-focus:-top-1.75 peer-focus:translate-y-0 peer-focus:scale-75 peer-focus:text-blue-500 peer-focus:bg-white peer-focus:px-1
+                    peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100
+                    peer-placeholder-shown:text-gray-500
+                    transition-[top,scale,translate,color,padding] duration-350 dark:peer-focus:bg-black'>
+                        Email
+                    </label>
+                </div>
             </div>
             <div className="w-full ">
-                <p>Password</p>
-                <input onChange={(e) => setPassword(e.target.value)} value={password} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-indigo-500" type="password" required />
+                {/* <p>Password</p> */}
+                {/* <input onChange={(e) => setPassword(e.target.value)} value={password} placeholder="type here" className="border border-gray-200 rounded w-full p-2 mt-1 outline-blue-500" type="password" required /> */}
+                <div className='relative flex-1'>
+                    <input
+                        className="w-full p-2 mt-1 border border-gray-300 rounded outline-blue-500 dark:text-white
+                    dark:border-gray-600/60 dark:placeholder:text-gray-500 caret-blue-500 transition-all duration-400 placeholder:text-xs peer"
+                        type="text" placeholder=" "
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <label className='absolute left-2 text-sm text-gray-500 pointer-events-none origin-left -top-1.75 scale-75 px-1 bg-white
+                    peer-focus:-top-1.75 peer-focus:translate-y-0 peer-focus:scale-75 peer-focus:text-blue-500 peer-focus:bg-white peer-focus:px-1
+                    peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100
+                    peer-placeholder-shown:text-gray-500
+                    transition-[top,scale,translate,color,padding] duration-350 dark:peer-focus:bg-black'>
+                        Password
+                    </label>
+                </div>
             </div>
             {state === "register" ? (
                 <p>
-                    Already have account? <span onClick={() => setState("login")} className="text-indigo-500 cursor-pointer">click here</span>
+                    Already have account? <span onClick={() => setState("login")} className="text-blue-500 font-semibold cursor-pointer">click here</span>
                 </p>
             ) : (
                 <p>
-                    Create an account? <span onClick={() => setState("register")} className="text-indigo-500 cursor-pointer">click here</span>
+                    Create an account? <span onClick={() => setState("register")} className="text-blue-500 font-semibold cursor-pointer">click here</span>
                 </p>
             )}
-            <button type="submit" className="bg-indigo-500 hover:bg-indigo-600 transition-all text-white w-full py-2 rounded-md cursor-pointer">
+            <button type="submit" className="bg-blue-500 hover:bg-blue-600 transition-all text-white w-full py-2 rounded-md cursor-pointer">
                 {state === "register" ? "Create Account" : "Login"}
             </button>
         </form>

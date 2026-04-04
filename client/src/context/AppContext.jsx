@@ -28,7 +28,7 @@ const AppContextProvider = ({ children }) => {
                 return toast.error(data.message)
             }
         } catch (err) {
-            toast.error(err.message)
+            console.log(err)
         } finally {
             setLoading(false);
         }
@@ -52,7 +52,7 @@ const AppContextProvider = ({ children }) => {
             await axios.post("/user/logout");
 
             setUser(null);
-            setTodoList([]);
+            dispatch(setTodoList([]));
 
         } catch (err) {
             console.error(err);
@@ -60,15 +60,16 @@ const AppContextProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        fetchUser();
-    }, [])
+        if(location.pathname === '/login') return
+        fetchUser()
+    }, [location.pathname])
 
     useEffect(() => {
         if (user) {
             navigate('/')
             fetchTasks();
         } else {
-            setTodoList([]);
+            dispatch(setTodoList([]));
         }
     }, [user])
 
@@ -80,7 +81,7 @@ const AppContextProvider = ({ children }) => {
         }
     }, [theme])
 
-    const value = { user, setUser, todoList, setTodoList, logout, loading, theme, setTheme }
+    const value = { user, setUser, todoList, setTodoList, logout, loading, theme, setTheme, fetchUser }
 
     return (
         <AppContext.Provider value={value}>

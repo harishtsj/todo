@@ -13,7 +13,7 @@ const Header = () => {
 
     const handleLogout = async () => {
         setIsModalOpen(false);
-        await logout()
+        await logout();
     }
 
     const closePopup = () => {

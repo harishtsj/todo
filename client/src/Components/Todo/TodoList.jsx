@@ -111,19 +111,23 @@ const Todo = () => {
             <div className="flex flex-col sm:flex-row gap-2 w-full">
                 <div className='relative flex-1'>
                     <input
-                        className="w-full px-2 py-3 border rounded outline-none focus:border-blue-500 focus:outline-none dark:text-white
-                    dark:border-gray-600/60 dark:placeholder:text-gray-500 caret-blue-500 transition-all duration-200 placeholder:text-xs peer"
-                        type="text" placeholder=" "
+                        className="w-full px-2 py-3 border border-gray-300 rounded dark:text-white outline-none focus:ring-2 focus:ring-blue-500
+                        dark:border-gray-700 dark:placeholder:text-gray-500 caret-blue-500 transition-all duration-200 placeholder:text-xs peer"
+                        type="text"
+                        placeholder=''
                         autoFocus
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') addItems(value) }}
                     />
-                    <label className='absolute left-2 text-sm text-gray-500 pointer-events-none origin-left top-1 scale-75
-                    peer-focus:-top-2.25 peer-focus:translate-y-0 peer-focus:scale-75 peer-focus:text-blue-500 peer-focus:bg-white peer-focus:px-1
+                    <label className='absolute left-2 text-sm text-gray-500 pointer-events-none origin-left
+                        -top-2.5 scale-75 bg-white px-1 dark:bg-black 
+                    
+                    peer-focus:-top-2.5 peer-focus:translate-y-0 peer-focus:scale-75 peer-focus:text-blue-500 peer-focus:bg-white peer-focus:px-1
+                    
                     peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100
                     peer-placeholder-shown:text-gray-500
-                    transition-all duration-200 dark:peer-focus:bg-black'>
+                    transition-[top,scale,translate,color,padding] duration-200 dark:peer-focus:bg-black'>
                         Add Something...
                     </label>
                 </div>
