@@ -108,7 +108,7 @@ const Todo = () => {
     return (
         <div className='flex flex-col p-3 gap-3 items-center'>
             <h3 className="font-semibold text-center dark:text-white">My Todo List</h3>
-            <div className="flex flex-col sm:flex-row gap-2 w-full">
+            <div className="flex flex-col sm:items-center sm:flex-row gap-2 w-full">
                 <div className='relative flex-1'>
                     <input
                         className="w-full px-2 py-3 border border-gray-300 rounded dark:text-white outline-none focus:ring-2 focus:ring-blue-500
@@ -133,7 +133,7 @@ const Todo = () => {
                 </div>
 
                 <button
-                    className="mt-2 bg-blue-500 min-w-29 text-white px-4 py-2 rounded hover:scale-[1.01] transition-all duration-300 w-full text-wrap sm:w-auto active:scale-90"
+                    className="max-sm:mt-2 bg-blue-500 min-w-29 text-white px-4 py-2 rounded hover:scale-[1.01] transition-all duration-300 w-full text-wrap sm:w-auto active:scale-90"
                     onClick={() => addItems(value)}
                 >
                     Add
