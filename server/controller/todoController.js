@@ -101,7 +101,7 @@ export const updateTask = async (req, res) => {
             // {new: true} means, return the updated document, else old document will be returned
             // {returnDocument: 'after'} also same
             // the difference
-            // new: true is used inmongoose method, returnDocument: after used in mongodb driver
+            // (new: true) is used inmongoose method, (returnDocument: after) used in mongodb driver
         )
 
         if (!updatedTask) {

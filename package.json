@@ -5,6 +5,8 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
+    "install-client": "npm install --prefix client",
+    "install-server": "npm install --prefix server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "npm run build --prefix client && npm start --prefix server"
   },

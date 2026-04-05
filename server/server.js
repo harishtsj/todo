@@ -15,7 +15,7 @@ import userRouter from './router/userRouter.js';
 dns.setServers(["1.1.1.1"]);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.use(helmet());
 app.use(cookieParser())
 

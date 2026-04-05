@@ -105,7 +105,7 @@ const StatusTabs = ({ active, onChange }) => {
 
     return (
         <div className="pb-2">
-            <div ref={containerRef} className="flex relative gap-3 overflow-x-auto sm:min-w-95">
+            <div ref={containerRef} className="flex relative gap-3 overflow-x-auto sm:min-w-95 no-scrollbar">
                 {tabs.map((tab) => {
                     const isActive = active === tab;
                     return (
